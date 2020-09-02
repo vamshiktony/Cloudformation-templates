@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation Sample Template for EC2 creation
+
+Parameters:
+  Subnet:
+    Type: 'AWS::EC2::Subnet::Id'
+    Description: The subnets where Cluster can be created.
+    AllowedPattern: ^[0-9A-Za-z][A-Za-z0-9\-_]*  
+  amiid:
+    Type: String
+    Description: The ami type for instance
+    AllowedPattern: ^[0-9A-Za-z][A-Za-z0-9\-_]*  
+  instanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues: 
+      - t3.medium
+      - t2.medium
+      - m1.large
+      - t2.micro
+      - t2.large
+  keypair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: The subnets where Cluster can be created.
+    AllowedPattern: ^[0-9A-Za-z][A-Za-z0-9\-_]*    
+  
+
+Resources:
+  MyEC2Instance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      SubnetId: !Ref Subnet
+      ImageId: !Ref amiid
+      InstanceType: !Ref instanceType
+      KeyName: !Ref keypair
+      SecurityGroupIds: 
+        - sg-0ef31347f3d0e073d
+
+Outputs:
+  instanceId:
+    Description: Id of the instace created
+    Value: !Ref MyEC2Instance
+
+  publicDNSandIp:
+    Description: Dns name and Public-Ip of the instace created  
+    Value: !GetAtt MyEC2Instance.PublicIp
+
+  
+  
+  
